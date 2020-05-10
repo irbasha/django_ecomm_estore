@@ -1,0 +1,89 @@
+{% load static %}
+{% load cart_template_tags %}
+
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="{% url 'estore:store' %}">Estore</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse ml-4" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Men
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="width: 800px; height: 500px;">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Women
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="width: 800px; height: 500px;">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Kids
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="width: 800px; height: 500px;">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+    </ul>
+
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    </form>
+
+    <div class="form-inline my-2 my-lg-0">
+      {% if request.user.is_authenticated %}
+      <!-- <a href="#">Hello {{ request.user }}</a> -->
+
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ request.user }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'estore:profile' %}">My Profile</a>
+            <a class="dropdown-item" href="{% url 'estore:order_history' %}">My Orders</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Wish List</a>
+          </div>
+        </li>
+      </ul>
+
+      <a href="{% url 'estore:cart' %}">
+        <img id="cart-icon" src="{% static 'img/cart.png' %}" alt="">
+      </a>
+      <p id="cart-total"> {% if request.user|cart_item_count %} {{ request.user|cart_item_count }} {% else%} 0 {% endif %}</p>
+
+      <a href="{% url 'account_logout' %}" class="btn btn-sm btn-danger mr-2 ml-2">Logout</a>
+
+      {% else %}
+      <a href="{% url 'estore:cart' %}">
+        <img id="cart-icon" src="{% static 'img/cart.png' %}" alt="">
+      </a>
+      <p id="cart-total">0</p>
+
+      <a href="{% url 'account_login' %}" class="btn btn-sm btn-primary mr-2 ml-2">Login</a>
+      <a href="{% url 'account_signup' %}" class="btn btn-sm btn-success ml-2 mr-2">Sign up</a>
+
+      {% endif %}
+    </div>
+  </div>
+</nav>

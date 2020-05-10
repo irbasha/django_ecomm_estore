@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% if object %}
+
+<div>
+  <h6><strong> My Cart ({{ object.get_total_items }}) </strong></h3>
+</div>
+
+<hr>
+
+<div class="row">
+  <div class="col-lg-6">
+    {% for order_item in object.items.all %}
+    <div class="card mb-2" style="max-width: 540px;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img class="product-img" , src="/{{ order_item.get_image_url }}" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">{{ order_item.item.title }}</h5>
+            <hr>
+            <p class="card-text">
+              {% if order_item.item.discount_price %}
+              <strong><span>₹ {{ order_item.item.discount_price }}</span></strong>
+              <small>
+                <span class="ml-1">
+                  <del>₹{{ order_item.item.price }}</del>
+                </span>
+                <span class="badge badge-primary"> {{ order_item.item.get_discount_percentage }}% off </span>
+              </small>
+              {% else %}
+              <strong><span>₹{{ order_item.item.price }}</span></strong>
+              {% endif %}
+            </p>
+            <p class="card-text" style="color: black;">
+              <a class="caret" href="{% url 'estore:cart_update' order_item.item.slug %}" id="removefromcart">
+                <svg class="bi bi-caret-left" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M10 12.796L4.519 8 10 3.204v9.592zm-.659.753l-5.48-4.796a1 1 0 010-1.506l5.48-4.796A1 1 0 0111 3.204v9.592a1 1 0 01-1.659.753z"
+                    clip-rule="evenodd" />
+                </svg>
+              </a>
+              {{ order_item.quantity }}
+              <a class="caret" href="{% url 'estore:cart_add' order_item.item.slug %}" id="addtocart">
+                <svg class="bi bi-caret-right" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M6 12.796L11.481 8 6 3.204v9.592zm.659.753l5.48-4.796a1 1 0 000-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 001.659.753z"
+                    clip-rule="evenodd" />
+                </svg>
+              </a>
+            </p>
+            <hr>
+            <p class="card-text">
+              <a href="#" class="btn btn-outline-secondary mr-2"> Add to Wishlist </a>
+              <a href="{% url 'estore:cart_remove' order_item.item.slug %}" class="btn btn-outline-danger ml-2"> Remove
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    {% endfor %}
+    <div class="mb-4 mt-2">
+      <a href="{% url 'estore:store' %}" class="btn btn-outline-success mr-2 ml-1"> Continue Shopping </a>
+      <a href="{% url 'estore:checkout' %}" class="btn btn-outline-warning ml-2 mr-1"> Place Order </a>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div style="position: fixed;">
+
+      <div class="card border-light mb-3" style="width: 540px;">
+        <div class="card-header">Price Details</div>
+        <div class="card-body">
+          <h5 class="card-title"></h5>
+          <p class="card-text">
+          <h4><strong>Price: (Items x {{ object.items.count }}) </strong> <span style="float: right;">
+              ₹{{ object.get_amount  }}</span></h4>
+          </p>
+          <p class="card-text">
+          <h6>Delivery <span style="float: right;"> FREE </span></h6>
+          </p>
+          <hr>
+          <p class="card-text">
+          <h1><strong>Total</strong> <span style="float: right;"> ₹{{ object.get_total_amount }}</span></h1>
+          </p>
+          <hr>
+          <p class="card-text">
+            You will save ₹{{ object.get_total_saved_amount }} on this order
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% else %}
+
+<div style="text-align: center;">
+  <h6>Your Cart is Empty</h6>
+  <hr>
+  <p>
+    <a href="{% url 'estore:store' %}" class="btn btn-primary"> Shop Now</a>
+  </p>
+
+</div>
+{% endif %}
+
+
+{% endblock content %}
